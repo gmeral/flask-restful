@@ -6,7 +6,7 @@ from flask import request, url_for, current_app
 from flask import abort as original_flask_abort
 from flask.views import MethodView
 from flask.signals import got_request_exception
-from werkzeug.exceptions import HTTPException, MethodNotAllowed, NotFound
+from werkzeug.exceptions import MethodNotAllowed, NotFound
 from werkzeug.http import HTTP_STATUS_CODES
 from werkzeug.wrappers import Response as ResponseBase
 from flask.ext.restful.utils import error_data, unpack
@@ -29,12 +29,7 @@ def abort(http_status_code, **kwargs):
     arguments to the exception for later processing.
     """
     #noinspection PyUnresolvedReferences
-    try:
-        original_flask_abort(http_status_code)
-    except HTTPException as e:
-        if len(kwargs):
-            e.data = kwargs
-        raise
+    original_flask_abort(http_status_code, **kwargs)
 
 DEFAULT_REPRESENTATIONS = {'application/json': output_json}
 
